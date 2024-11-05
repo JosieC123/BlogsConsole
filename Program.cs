@@ -41,10 +41,14 @@ do
         // Create and save a new Blog
         Console.Write("Enter a name for a new Blog: ");
         var name = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(name)){
+            logger.Error("Blog name cannot be null");
+        }else{
         var blog = new Blog { Name = name };
         var db = new DataContext();
         db.AddBlog(blog);
         logger.Info("Blog added - {name}", name);
+        }
     }
     else if (choice == "3")
     {
