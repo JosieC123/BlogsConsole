@@ -10,8 +10,6 @@ logger.Info("Program started");
 string? choice;
 do
 {
-
-
     Console.WriteLine("1) Display all blogs");
     Console.WriteLine("2) Add Blog");
     Console.WriteLine("3) Create Post");
@@ -19,31 +17,37 @@ do
 
     choice = Console.ReadLine();
 
-if (choice == "1"){
-    //Display all blogs
-}else if (choice == "2"){
-    //Add blog
-}else if (choice == "3"){
-    //create post
-}else if (choice == "4"){
-    //Display Posts
-}
-}while (choice == "1" || choice == "2" || choice == "3" || choice == "4");
+    if (choice == "1")
+    {
+        //Display all blogs
+        var db = new DataContext();
+        var query = db.Blogs.OrderBy(b => b.Name);
+        Console.WriteLine("All blogs in the database:");
+        foreach (var item in query)
+        {
+            Console.WriteLine(item.Name);
+        }
+    }
+    else if (choice == "2")
+    {
+        //Add blog
+    }
+    else if (choice == "3")
+    {
+        //create post
+    }
+    else if (choice == "4")
+    {
+        //Display Posts
+    }
+} while (choice == "1" || choice == "2" || choice == "3" || choice == "4");
 
+// // Create and save a new Blog
+// Console.Write("Enter a name for a new Blog: ");
+// var name = Console.ReadLine();
+// var blog = new Blog { Name = name };
+// var db = new DataContext();
+// db.AddBlog(blog);
+// logger.Info("Blog added - {name}", name);
 
-    // // Create and save a new Blog
-    // Console.Write("Enter a name for a new Blog: ");
-    // var name = Console.ReadLine();
-    // var blog = new Blog { Name = name };
-    // var db = new DataContext();
-    // db.AddBlog(blog);
-    // logger.Info("Blog added - {name}", name);
-    // // Display all Blogs from the database
-    // var query = db.Blogs.OrderBy(b => b.Name);
-    // Console.WriteLine("All blogs in the database:");
-    // foreach (var item in query)
-    // {
-    //   Console.WriteLine(item.Name);
-    // }
-
-    logger.Info("Program ended");
+logger.Info("Program ended");
