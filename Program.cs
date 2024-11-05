@@ -31,6 +31,13 @@ do
     else if (choice == "2")
     {
         //Add blog
+        // Create and save a new Blog
+        Console.Write("Enter a name for a new Blog: ");
+        var name = Console.ReadLine();
+        var blog = new Blog { Name = name };
+        var db = new DataContext();
+        db.AddBlog(blog);
+        logger.Info("Blog added - {name}", name);
     }
     else if (choice == "3")
     {
@@ -41,13 +48,5 @@ do
         //Display Posts
     }
 } while (choice == "1" || choice == "2" || choice == "3" || choice == "4");
-
-// // Create and save a new Blog
-// Console.Write("Enter a name for a new Blog: ");
-// var name = Console.ReadLine();
-// var blog = new Blog { Name = name };
-// var db = new DataContext();
-// db.AddBlog(blog);
-// logger.Info("Blog added - {name}", name);
 
 logger.Info("Program ended");
