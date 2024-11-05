@@ -10,7 +10,7 @@ logger.Info("Program started");
 string? choice;
 do
 {
-    Console.WriteLine("1) Display all blogs");
+    Console.WriteLine("\n1) Display all blogs");
     Console.WriteLine("2) Add Blog");
     Console.WriteLine("3) Create Post");
     Console.WriteLine("4) Display Posts");
@@ -21,11 +21,18 @@ do
     {
         //Display all blogs
         var db = new DataContext();
-        var query = db.Blogs.OrderBy(b => b.Name);
-        Console.WriteLine("All blogs in the database:");
-        foreach (var item in query)
+        var query = db.Blogs.OrderBy(b => b.Name).ToList();
+        if (query.Count == 0)
         {
-            Console.WriteLine(item.Name);
+            Console.WriteLine("0 Blogs Returned");
+        }
+        else
+        {
+            Console.WriteLine($"\n{query.Count} Blogs Returned");
+            foreach (var item in query)
+            {
+                Console.WriteLine(item.Name);
+            }
         }
     }
     else if (choice == "2")
