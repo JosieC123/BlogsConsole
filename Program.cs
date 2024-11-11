@@ -107,6 +107,57 @@ do
     else if (choice == "4")
     {
         //Display Posts
+        Console.WriteLine("Select the blog's Posts to display\n");
+
+        //Display all blogs
+        var db = new DataContext();
+        var query = db.Blogs.OrderBy(b => b.BlogId).ToList();
+        foreach (var item in query)
+        {
+            Console.WriteLine($"{item.BlogId}) {item.Name}");
+        }
+
+        var blogOption = Console.ReadLine();
+        if (int.TryParse(blogOption, out int blogId))
+        {
+
+            if (blogId == 0)
+            {
+                //display all if entered 0
+                var queryPosts = db.Posts.OrderBy(b => b.PostId).ToList();
+                Console.WriteLine($"\n{queryPosts.Count} Post(s) Returned");
+                foreach (var item in queryPosts)
+                {
+                    Console.WriteLine($"Id: {item.PostId}, Title: {item.Title}\n Content: {item.Content} BlogId: {item.BlogId} Blog: {item.Blog}");
+                }
+            }
+            else
+            {
+                var selectedChoice = query.FirstOrDefault(b => b.BlogId == blogId);
+
+                if (selectedChoice != null)
+                {
+                    //show posts based of blog id
+                    var queryPosts = db.Posts.Where(p => p.BlogId == blogId).OrderBy(b => b.PostId).ToList();
+                    Console.WriteLine($"\n{queryPosts.Count} Post(s) Returned");
+                    foreach (var item in queryPosts)
+                    {
+                        Console.WriteLine($"Id: {item.PostId}, Title: {item.Title}\n Content: {item.Content} BlogId: {item.BlogId} Blog: {item.Blog}");
+                    }
+                }
+                else
+                {
+                    //inValid integer entered for blog id
+                    logger.Error("There are no blogs saved with that Id");
+                }
+            }
+
+        }
+        else
+        {
+            //Invalid blog id entered - not an integer
+            Console.WriteLine("Invalid Blog Id");
+        }
     }
 } while (choice == "1" || choice == "2" || choice == "3" || choice == "4");
 
