@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using NLog;
+using NLog.LayoutRenderers;
 string path = Directory.GetCurrentDirectory() + "//nlog.config";
 
 // create instance of Logger
@@ -22,17 +23,17 @@ do
     {
         //Display all blogs
         var db = new DataContext();
-        var query = db.Blogs.OrderBy(b => b.Name).ToList();
+        var query = db.Blogs.OrderBy(b => b.BlogId).ToList();
         if (query.Count == 0)
         {
             Console.WriteLine("0 Blogs Returned");
         }
         else
         {
-            Console.WriteLine($"\n{query.Count} Blogs Returned");
+            Console.WriteLine($"{query.Count} Blogs Returned");
             foreach (var item in query)
             {
-                Console.WriteLine(item.Name);
+                Console.WriteLine($"{item.BlogId}. {item.Name}");
             }
         }
     }
@@ -128,7 +129,7 @@ do
                 Console.WriteLine($"\n{queryPosts.Count} Post(s) Returned");
                 foreach (var item in queryPosts)
                 {
-                    Console.WriteLine($"Id: {item.PostId}, Title: {item.Title}\n Content: {item.Content} BlogId: {item.BlogId} Blog: {item.Blog}");
+                    Console.WriteLine($"Blog: {item.Blog.Name}\n\tTitle: {item.Title}\n\tContent: {item.Content}\n");
                 }
             }
             else
@@ -142,7 +143,7 @@ do
                     Console.WriteLine($"\n{queryPosts.Count} Post(s) Returned");
                     foreach (var item in queryPosts)
                     {
-                        Console.WriteLine($"Id: {item.PostId}, Title: {item.Title}\n Content: {item.Content} BlogId: {item.BlogId} Blog: {item.Blog}");
+                        Console.WriteLine($"Blog: {item.Blog.Name}\n\tTitle: {item.Title}\n\tContent: {item.Content}\n");
                     }
                 }
                 else
@@ -151,7 +152,6 @@ do
                     logger.Error("There are no blogs saved with that Id");
                 }
             }
-
         }
         else
         {
