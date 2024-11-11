@@ -14,6 +14,7 @@ do
     Console.WriteLine("2) Add Blog");
     Console.WriteLine("3) Create Post");
     Console.WriteLine("4) Display Posts");
+    Console.WriteLine("Enter q to quit");
 
     choice = Console.ReadLine();
 
@@ -41,18 +42,67 @@ do
         // Create and save a new Blog
         Console.Write("Enter a name for a new Blog: ");
         var name = Console.ReadLine();
-        if (string.IsNullOrWhiteSpace(name)){
+        if (string.IsNullOrWhiteSpace(name))
+        {
             logger.Error("Blog name cannot be null");
-        }else{
-        var blog = new Blog { Name = name };
-        var db = new DataContext();
-        db.AddBlog(blog);
-        logger.Info("Blog added - {name}", name);
+        }
+        else
+        {
+            var blog = new Blog { Name = name };
+            var db = new DataContext();
+            db.AddBlog(blog);
+            logger.Info("Blog added - {name}", name);
         }
     }
     else if (choice == "3")
     {
         //create post
+        //make foreach loop display blog id and name
+        var db = new DataContext();
+        var query = db.Blogs.OrderBy(b => b.BlogId).ToList();
+
+        Console.WriteLine("Select a blog you would like to post to: ");
+        foreach (var item in query)
+        {
+            Console.WriteLine($"{item.BlogId}) {item.Name}");
+        }
+
+        var blogOption = Console.ReadLine();
+        if (int.TryParse(blogOption, out int blogId))
+        {
+            var selectedBlog = query.FirstOrDefault(b => b.BlogId == blogId);
+
+            if (selectedBlog != null)
+            {
+                //create title
+                Console.WriteLine("Enter the Post title: ");
+                var postTitle = Console.ReadLine();
+                if (string.IsNullOrWhiteSpace(postTitle))
+                {
+                    logger.Error("Post title cannot be null");
+                    return;
+                }
+
+                //create content
+                Console.WriteLine("Enter the Post content: ");
+                var postContent = Console.ReadLine();
+
+                //created AddPost method to match AddBlog
+                var post = new Post { Title = postTitle, Content = postContent, BlogId = selectedBlog.BlogId };
+                db.AddPost(post);
+                logger.Info("Post added - {postTitle}", postTitle);
+            }
+            else
+            {
+                //inValid integer entered for blog id
+                logger.Error("There are no blogs saved with that Id");
+            }
+        }
+        else
+        {
+            //Invalid blog id entered - not an integer
+            logger.Error("Invalid Blog Id");
+        }
     }
     else if (choice == "4")
     {
